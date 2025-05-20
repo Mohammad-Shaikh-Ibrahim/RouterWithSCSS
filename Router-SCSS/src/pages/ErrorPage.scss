@@ -6,12 +6,12 @@
   min-height: 100vh;
   background-color: #f8f9fa;
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 2rem;
 
   h1 {
     font-size: 8rem;
-    color: #e63946;
+    color: #b92031;
     margin-bottom: 0;
   }
 
@@ -23,14 +23,14 @@
 
   p {
     font-size: 1.5rem;
-    color: #555;
+    color: #457b9d;
     margin-bottom: 2rem;
   }
 
   a {
     font-size: 1.5rem;
     text-decoration: none;
-    background-color: #1d3557;
+    background-color: #b92031;
     color: white;
     padding: 0.7rem 1.5rem;
     border-radius: 8px;
@@ -38,7 +38,7 @@
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: #457b9d;
+      background-color: #8b0019;
     }
   }
 }

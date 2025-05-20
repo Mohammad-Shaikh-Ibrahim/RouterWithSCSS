@@ -5,14 +5,18 @@
   gap: 6em;
   padding: 4em;
   min-height: 100vh;
-  background: linear-gradient(to right, #dbeafe, #f0f9ff);
+  background: linear-gradient(
+    to right,
+    rgba(244, 67, 54, 0.05),
+    rgba(244, 67, 54, 0.15)
+  );
   flex-wrap: wrap;
   box-sizing: border-box;
   max-width: 90%;
   margin: auto;
 }
 
-.students {
+.patients {
   flex: 1 1 45%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
@@ -22,45 +26,46 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.students:hover {
+.patients:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.students h1 {
+.patients h1 {
   font-size: 2rem;
-  color: #1e3a8a;
+  color: #b92031;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #93c5fd;
+  border-bottom: 2px solid rgba(244, 67, 54, 0.085);
   padding-bottom: 0.5rem;
 }
 
-.student-table {
+.patient-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.student-table th,
-.student-table td {
+.patient-table th,
+.patient-table td {
   padding: 1rem;
   border-bottom: 1px solid #e5e7eb;
   text-align: left;
   font-size: 1.1rem;
 }
 
-.student-table th {
-  background-color: #eff6ff;
-  color: #1e40af;
+.patient-table th {
+  background-color: rgba(244, 67, 54, 0.085);
+  color: #b92031;
 }
 
-.student-table tr:hover {
-  background-color: #f3f4f6;
+.patient-table tr:hover {
+  background-color: rgba(244, 67, 54, 0.05);
 }
+
 .details-btn {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: linear-gradient(to right, #3b82f6, #2563eb);
+  background: linear-gradient(to right, #b92031, #8b0019);
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -71,10 +76,9 @@
 }
 
 .details-btn:hover {
-  background: linear-gradient(to right, #2563eb, #1d4ed8);
+  background: linear-gradient(to right, #8b0019, #b92031);
   transform: scale(1.05);
 }
-
 
 @media (max-width: 768px) {
   .container {
@@ -82,7 +86,7 @@
     align-items: stretch;
   }
 
-  .students {
+  .patients {
     width: 100%;
   }
 }
