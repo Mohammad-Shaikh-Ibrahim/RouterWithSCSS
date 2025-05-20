@@ -21,7 +21,6 @@ export default function PatientDetails() {
                         <th>ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Age</th>
                         <th>Gender</th>
                         <th>Birth Date</th>
                         <th>Disorders</th>
@@ -33,7 +32,6 @@ export default function PatientDetails() {
                         <td>{patient.id}</td>
                         <td>{patient.firstName}</td>
                         <td>{patient.lastName}</td>
-                        <td>{patient.age}</td>
                         <td>{patient.gender}</td>
                         <td>{patient.birthDate}</td>
                         <td>{patient.disorders.join(', ')}</td>

@@ -7,6 +7,8 @@ import {
 import { DatePicker } from '@mui/x-date-pickers';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { usePatients } from '../hooks/usePatients';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
   firstName: yup.string().required("First name is required"),
@@ -24,6 +26,8 @@ const schema = yup.object().shape({
 const disorderOptions = ['PD', 'ET', 'Dyst_G', 'Dyst_NG', 'OCD', 'Tourette', 'Epilepsy', 'Other'];
 
 const AddPatientReactHookForm = () => {
+  const { addPatient } = usePatients();
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -54,7 +58,13 @@ const AddPatientReactHookForm = () => {
   };
 
   const onSubmit = (data) => {
-    console.log("Form Data: ", data);
+    const formattedBirthDate = data.birthDate.toISOString().split('T')[0];
+    const newPatient = {
+      ...data,
+      birthDate: formattedBirthDate
+    };
+    addPatient(newPatient);
+    navigate('/');
   };
 
   return (
@@ -214,7 +224,14 @@ const AddPatientReactHookForm = () => {
           {/* Buttons */}
           <Grid size={12}>
             <Button variant="contained" color="primary" type="submit">Save</Button>
-            <Button variant="outlined" color="primary" sx={{ ml: 2 }}>Cancel</Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{ ml: 2 }}
+              onClick={() => navigate('/')}
+            >
+              Cancel
+            </Button>
           </Grid>
         </Grid>
       </form>

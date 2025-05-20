@@ -2,6 +2,7 @@ import './App.css';
 import Patients from './pages/Patients';
 import PatientDetails from './pages/PatientDetails';
 import ErrorPage from './pages/ErrorPage';
+import AddPatientPage from './pages/AddPatientPage';
 import { PatientProvider } from './contexts/PatientContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
       { index: true, element: <Patients /> },
       { path: 'error', element: <ErrorPage /> },
       { path: 'patientDetails/:patientId', element: <PatientDetails /> },
+      { path: 'add-patient', element: <AddPatientPage /> },
     ],
   },
 ]);
