@@ -223,10 +223,17 @@ const AddPatientReactHookForm = () => {
 
           {/* Buttons */}
           <Grid size={12}>
-            <Button variant="contained" color="primary" type="submit">Save</Button>
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
+              type="submit"
+              sx={{ px: 6 }}
+            >
+              Save
+            </Button>
+            <Button
+              variant="text"
+              color="black"
               sx={{ ml: 2 }}
               onClick={() => navigate('/')}
             >

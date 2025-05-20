@@ -19,15 +19,25 @@ const Patients = () => {
                     <div className="patients">
                         <div className="header">
                             <h1>Patients</h1>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                startIcon={<AddIcon />}
-                                onClick={() => navigate('/add-patient')}
-                                className="add-patient-btn"
-                            >
-                                Add New Patient
-                            </Button>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => navigate('/add-patient')}
+                                    className="add-patient-btn"
+                                >
+                                    Add New Patient
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => navigate('/add-patient-formik')}
+                                >
+                                    Add Patient (Formik)
+                                </Button>
+                            </div>
                         </div>
                         <table className="patient-table">
                             <thead>
@@ -46,7 +56,7 @@ const Patients = () => {
                                         <td>{patient.gender}</td>
                                         <td>
                                             <Link to={`/patientDetails/${patient.id}`} className="details-btn">
-                                                Read More..
+                                                Read More
                                             </Link>
                                         </td>
                                     </tr>
