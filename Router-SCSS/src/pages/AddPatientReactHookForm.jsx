@@ -5,37 +5,16 @@ import {
   Typography, FormGroup
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { usePatients } from '../hooks/usePatients';
 import { useNavigate } from 'react-router-dom';
-
-const schema = yup.object().shape({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
-  gender: yup.string().required("Gender is required"),
-  birthDate: yup
-    .date()
-    .typeError("Please enter a valid date")
-    .required("Date of birth is required")
-    .max(new Date(), "Birth date cannot be in the future"),
-  disorders: yup.array().min(1, "At least one disorder must be selected"),
-  template: yup.string().required("Workspace template is required"),
-});
 
 const disorderOptions = ['PD', 'ET', 'Dyst_G', 'Dyst_NG', 'OCD', 'Tourette', 'Epilepsy', 'Other'];
 
 const AddPatientReactHookForm = () => {
   const { addPatient } = usePatients();
   const navigate = useNavigate();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors }
-  } = useForm({
-    resolver: yupResolver(schema),
+  
+  const { control, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -45,17 +24,6 @@ const AddPatientReactHookForm = () => {
       template: '',
     }
   });
-
-  const disorders = watch('disorders');
-  const gender = watch('gender');
-
-  const handleDisorderChange = (event) => {
-    const value = event.target.name;
-    const updated = disorders.includes(value)
-      ? disorders.filter((d) => d !== value)
-      : [...disorders, value];
-    setValue('disorders', updated);
-  };
 
   const onSubmit = (data) => {
     const formattedBirthDate = data.birthDate.toISOString().split('T')[0];
@@ -67,17 +35,33 @@ const AddPatientReactHookForm = () => {
     navigate('/');
   };
 
+  const watchedValues = watch();
+
   return (
     <Card sx={{ p: 3, maxWidth: '80%', mx: 'auto', my: 4 }}>
       <Typography variant="h4" gutterBottom sx={{ my: 4 }}>Add a patient</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-
           {/* First Name */}
           <Grid size={3}>
             <Controller
               name="firstName"
               control={control}
+              rules={{
+                required: "First name is required",
+                pattern: {
+                  value: /^[^\d]*$/,
+                  message: "First name cannot contain numbers"
+                },
+                minLength: {
+                  value: 2,
+                  message: "First name must be at least 2 characters"
+                },
+                maxLength: {
+                  value: 50,
+                  message: "First name cannot exceed 50 characters"
+                }
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -95,6 +79,21 @@ const AddPatientReactHookForm = () => {
             <Controller
               name="lastName"
               control={control}
+              rules={{
+                required: "Last name is required",
+                pattern: {
+                  value: /^[^\d]*$/,
+                  message: "Last name cannot contain numbers"
+                },
+                minLength: {
+                  value: 2,
+                  message: "Last name must be at least 2 characters"
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Last name cannot exceed 50 characters"
+                }
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -109,12 +108,13 @@ const AddPatientReactHookForm = () => {
 
           {/* Gender */}
           <Grid size={12}>
-            <Controller
-              name="gender"
-              control={control}
-              render={({ field }) => (
-                <FormControl error={!!errors.gender}>
-                  <FormLabel>Gender *</FormLabel>
+            <FormControl error={!!errors.gender}>
+              <FormLabel>Gender *</FormLabel>
+              <Controller
+                name="gender"
+                control={control}
+                rules={{ required: "Gender is required" }}
+                render={({ field }) => (
                   <RadioGroup row {...field}>
                     {['Male', 'Female'].map((option) => (
                       <Box
@@ -124,8 +124,8 @@ const AddPatientReactHookForm = () => {
                         border={1}
                         borderRadius={1}
                         sx={{
-                          borderColor: gender === option ? 'primary.main' : 'grey.300',
-                          backgroundColor: gender === option ? 'secondary.main' : 'transparent',
+                          borderColor: watchedValues.gender === option ? 'primary.main' : 'grey.300',
+                          backgroundColor: watchedValues.gender === option ? 'secondary.main' : 'transparent',
                         }}
                       >
                         <FormControlLabel
@@ -136,10 +136,12 @@ const AddPatientReactHookForm = () => {
                       </Box>
                     ))}
                   </RadioGroup>
-                  <Typography variant="caption" color="error">{errors.gender?.message}</Typography>
-                </FormControl>
-              )}
-            />
+                )}
+              />
+              <Typography variant="caption" color="error">
+                {errors.gender?.message}
+              </Typography>
+            </FormControl>
           </Grid>
 
           {/* Birth Date */}
@@ -147,6 +149,16 @@ const AddPatientReactHookForm = () => {
             <Controller
               name="birthDate"
               control={control}
+              rules={{
+                required: "Date of birth is required",
+                validate: (value) => {
+                  if (!value) return "Date of birth is required";
+                  if (value > new Date()) {
+                    return "Birth date cannot be in the future";
+                  }
+                  return true;
+                }
+              }}
               render={({ field }) => (
                 <DatePicker
                   label="Date of birth *"
@@ -177,25 +189,41 @@ const AddPatientReactHookForm = () => {
                     border={1}
                     borderRadius={1}
                     sx={{
-                      borderColor: disorders.includes(disorder) ? 'primary.main' : 'grey.300',
-                      backgroundColor: disorders.includes(disorder) ? 'secondary.main' : 'transparent',
+                      borderColor: watchedValues.disorders?.includes(disorder) ? 'primary.main' : 'grey.300',
+                      backgroundColor: watchedValues.disorders?.includes(disorder) ? 'secondary.main' : 'transparent',
                     }}
                   >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={disorders.includes(disorder)}
-                          onChange={handleDisorderChange}
-                          name={disorder}
-                          color="primary"
+                    <Controller
+                      name="disorders"
+                      control={control}
+                      rules={{
+                        validate: (value) => value.length > 0 || "At least one disorder must be selected"
+                      }}
+                      render={({ field }) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={field.value?.includes(disorder)}
+                              onChange={(e) => {
+                                const newDisorders = e.target.checked
+                                  ? [...(field.value || []), disorder]
+                                  : (field.value || []).filter(d => d !== disorder);
+                                field.onChange(newDisorders);
+                              }}
+                              name={disorder}
+                              color="primary"
+                            />
+                          }
+                          label={disorder}
                         />
-                      }
-                      label={disorder}
+                      )}
                     />
                   </Box>
                 ))}
               </FormGroup>
-              <Typography variant="caption" color="error">{errors.disorders?.message}</Typography>
+              <Typography variant="caption" color="error">
+                {errors.disorders?.message}
+              </Typography>
             </FormControl>
           </Grid>
 
@@ -204,6 +232,7 @@ const AddPatientReactHookForm = () => {
             <Controller
               name="template"
               control={control}
+              rules={{ required: "Workspace template is required" }}
               render={({ field }) => (
                 <TextField
                   select

@@ -10,8 +10,17 @@ import { usePatients } from '../hooks/usePatients';
 import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required("First name is required"),
-    lastName: Yup.string().required("Last name is required"),
+    firstName: Yup.string()
+        .matches(/^[^\d]*$/, "First name cannot contain numbers")
+        .min(2, "First name must be at least 2 characters")
+        .max(50, "First name cannot exceed 50 characters")
+        .required("First name is required"),
+
+    lastName: Yup.string()
+        .matches(/^[^\d]*$/, "Last name cannot contain numbers")
+        .min(2, "Last name must be at least 2 characters")
+        .max(50, "Last name cannot exceed 50 characters")
+        .required("Last name is required"),
     gender: Yup.string().required("Gender is required"),
     birthDate: Yup
         .date()
