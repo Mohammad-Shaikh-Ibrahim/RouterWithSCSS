@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.io/Mohammad-Shaikh-Ibrahim/RouterWithSCSS",
+  "homepage": "https://github.io/Mohammad-Shaikh-Ibrahim/RouterWithSCSS/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
