@@ -7,13 +7,49 @@ import {
 import { DatePicker } from '@mui/x-date-pickers';
 import { usePatients } from '../hooks/usePatients';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const disorderOptions = ['PD', 'ET', 'Dyst_G', 'Dyst_NG', 'OCD', 'Tourette', 'Epilepsy', 'Other'];
+
+const StyledCard = styled(Card)`
+  padding: 24px;
+  max-width: 80%;
+  margin: 32px auto;
+`;
+
+const StyledTitle = styled(Typography)`
+  margin: 32px 0;
+`;
+
+const StyledButton = styled(Button)`
+  padding-left: 48px;
+  padding-right: 48px;
+`;
+
+const StyledCancelButton = styled(Button)`
+  margin-left: 16px;
+`;
+
+const StyledGenderBox = styled(Box)`
+  padding: 8px;
+  margin-right: 16px;
+  border: 1px solid ${props => props.selected ? '#b92031' : '#e0e0e0'};
+  border-radius: 4px;
+  background-color: ${props => props.selected ? 'rgba(244, 67, 54, 0.085)' : 'transparent'};
+`;
+
+const StyledDisorderBox = styled(Box)`
+  padding: 4px;
+  margin-right: 12px;
+  border: 1px solid ${props => props.selected ? '#b92031' : '#e0e0e0'};
+  border-radius: 4px;
+  background-color: ${props => props.selected ? 'rgba(244, 67, 54, 0.085)' : 'transparent'};
+`;
 
 const AddPatientReactHookForm = () => {
   const { addPatient } = usePatients();
   const navigate = useNavigate();
-  
+
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
       firstName: '',
@@ -38,8 +74,8 @@ const AddPatientReactHookForm = () => {
   const watchedValues = watch();
 
   return (
-    <Card sx={{ p: 3, maxWidth: '80%', mx: 'auto', my: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ my: 4 }}>Add a patient</Typography>
+    <StyledCard>
+      <StyledTitle variant="h4" gutterBottom>Add a patient</StyledTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           {/* First Name */}
@@ -117,23 +153,16 @@ const AddPatientReactHookForm = () => {
                 render={({ field }) => (
                   <RadioGroup row {...field}>
                     {['Male', 'Female'].map((option) => (
-                      <Box
+                      <StyledGenderBox
                         key={option}
-                        p={1}
-                        mr={2}
-                        border={1}
-                        borderRadius={1}
-                        sx={{
-                          borderColor: watchedValues.gender === option ? 'primary.main' : 'grey.300',
-                          backgroundColor: watchedValues.gender === option ? 'secondary.main' : 'transparent',
-                        }}
+                        selected={watchedValues.gender === option}
                       >
                         <FormControlLabel
                           value={option}
                           control={<Radio color="primary" />}
                           label={option}
                         />
-                      </Box>
+                      </StyledGenderBox>
                     ))}
                   </RadioGroup>
                 )}
@@ -182,16 +211,9 @@ const AddPatientReactHookForm = () => {
               <FormLabel component="legend">Disorders *</FormLabel>
               <FormGroup row>
                 {disorderOptions.map((disorder) => (
-                  <Box
+                  <StyledDisorderBox
                     key={disorder}
-                    p={0.5}
-                    mr={1.5}
-                    border={1}
-                    borderRadius={1}
-                    sx={{
-                      borderColor: watchedValues.disorders?.includes(disorder) ? 'primary.main' : 'grey.300',
-                      backgroundColor: watchedValues.disorders?.includes(disorder) ? 'secondary.main' : 'transparent',
-                    }}
+                    selected={watchedValues.disorders?.includes(disorder)}
                   >
                     <Controller
                       name="disorders"
@@ -218,7 +240,7 @@ const AddPatientReactHookForm = () => {
                         />
                       )}
                     />
-                  </Box>
+                  </StyledDisorderBox>
                 ))}
               </FormGroup>
               <Typography variant="caption" color="error">
@@ -252,26 +274,24 @@ const AddPatientReactHookForm = () => {
 
           {/* Buttons */}
           <Grid size={12}>
-            <Button
+            <StyledButton
               variant="contained"
               color="primary"
               type="submit"
-              sx={{ px: 6 }}
             >
               Save
-            </Button>
-            <Button
+            </StyledButton>
+            <StyledCancelButton
               variant="text"
               color="black"
-              sx={{ ml: 2 }}
               onClick={() => navigate('/')}
             >
               Cancel
-            </Button>
+            </StyledCancelButton>
           </Grid>
         </Grid>
       </form>
-    </Card>
+    </StyledCard>
   );
 };
 

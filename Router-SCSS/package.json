@@ -26,6 +26,7 @@
     "react-router-dom": "^7.6.0",
     "resolver": "^0.1.12",
     "sass": "^1.88.0",
+    "styled-components": "^6.1.18",
     "yup": "^1.6.1"
   },
   "devDependencies": {
