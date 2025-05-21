@@ -1,0 +1,38 @@
+export const initialPatients = [
+  {
+    id: 1,
+    firstName: "John",
+    lastName: "Doe",
+    gender: "Male",
+    birthDate: "1978-05-15",
+    disorders: ["PD", "ET"],
+    template: "Left",
+  },
+  {
+    id: 2,
+    firstName: "Jane",
+    lastName: "Smith",
+    gender: "Female",
+    birthDate: "1985-11-23",
+    disorders: ["Dyst_G"],
+    template: "Right",
+  },
+  {
+    id: 3,
+    firstName: "Michael",
+    lastName: "Johnson",
+    gender: "Male",
+    birthDate: "1971-03-08",
+    disorders: ["OCD", "Tourette"],
+    template: "Both",
+  },
+  {
+    id: 4,
+    firstName: "Sarah",
+    lastName: "Williams",
+    gender: "Female",
+    birthDate: "1982-07-30",
+    disorders: ["Epilepsy"],
+    template: "Left",
+  },
+];

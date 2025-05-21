@@ -1,8 +1,10 @@
 import './App.css';
-import Students from './pages/Students';
-import StudentDetails from './pages/StudentDetails';
+import Patients from './pages/Patients';
+import PatientDetails from './pages/PatientDetails';
 import ErrorPage from './pages/ErrorPage';
-import { StudentProvider } from './contexts/StudentContext';
+import AddPatientPage from './pages/AddPatientPage';
+import AddPatientFormikPage from './pages/AddPatientFormikPage';
+import { PatientProvider } from './contexts/PatientContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -10,21 +12,21 @@ const router = createBrowserRouter([
     path: '/',
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Students /> },
-      { path: 'students', element: <Students /> },
+      { index: true, element: <Patients /> },
       { path: 'error', element: <ErrorPage /> },
-      { path: 'studentDetails/:stdId', element: <StudentDetails /> },
+      { path: 'patientDetails/:patientId', element: <PatientDetails /> },
+      { path: 'add-patient', element: <AddPatientPage /> },
+      { path: 'add-patient-formik', element: <AddPatientFormikPage /> },
     ],
   },
 ]);
 
 function App() {
-  
   return (
     <>
-    <StudentProvider>
-      <RouterProvider router={router} />
-    </StudentProvider>
+      <PatientProvider>
+        <RouterProvider router={router} />
+      </PatientProvider>
     </>
   );
 }
