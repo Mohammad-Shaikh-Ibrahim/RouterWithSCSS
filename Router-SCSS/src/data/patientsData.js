@@ -6,7 +6,7 @@ export const initialPatients = [
     gender: "Male",
     birthDate: "1978-05-15",
     disorders: ["PD", "ET"],
-    template: "Template A",
+    template: "Left",
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const initialPatients = [
     gender: "Female",
     birthDate: "1985-11-23",
     disorders: ["Dyst_G"],
-    template: "Template B",
+    template: "Right",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ export const initialPatients = [
     gender: "Male",
     birthDate: "1971-03-08",
     disorders: ["OCD", "Tourette"],
-    template: "Template A",
+    template: "Both",
   },
   {
     id: 4,
@@ -33,6 +33,6 @@ export const initialPatients = [
     gender: "Female",
     birthDate: "1982-07-30",
     disorders: ["Epilepsy"],
-    template: "Template B",
+    template: "Left",
   },
 ];
