@@ -1,4 +1,4 @@
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   Box, Button, FormControl, FormLabel, Grid, MenuItem,
   RadioGroup, Radio, TextField, Checkbox, FormControlLabel,
@@ -22,7 +22,14 @@ const AddPatientReactHookForm = () => {
   const { addPatient } = usePatients();
   const navigate = useNavigate();
 
-  const { control, handleSubmit, watch, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors }
+  } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -32,6 +39,8 @@ const AddPatientReactHookForm = () => {
       template: '',
     }
   });
+
+  const watchedValues = watch();
 
   const onSubmit = (data) => {
     const d = new Date(data.birthDate);
@@ -48,19 +57,28 @@ const AddPatientReactHookForm = () => {
     navigate('/');
   };
 
-  const watchedValues = watch();
+  const handleDateChange = (date) => {
+    setValue('birthDate', date, { shouldValidate: true });
+    trigger('birthDate');
+  };
+
+  const handleGenderChange = (e) => {
+    setValue('gender', e.target.value, { shouldValidate: true });
+    trigger('gender');
+  };
 
   return (
     <StyledCard>
       <StyledTitle variant="h4" gutterBottom>Add a patient</StyledTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
+
           {/* First Name */}
           <Grid size={3}>
-            <Controller
-              name="firstName"
-              control={control}
-              rules={{
+            <TextField
+              label="First name *"
+              fullWidth
+              {...register('firstName', {
                 required: "First name is required",
                 pattern: {
                   value: /^[^\d]*$/,
@@ -74,25 +92,18 @@ const AddPatientReactHookForm = () => {
                   value: 50,
                   message: "First name cannot exceed 50 characters"
                 }
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="First name *"
-                  fullWidth
-                  error={!!errors.firstName}
-                  helperText={errors.firstName?.message}
-                />
-              )}
+              })}
+              error={!!errors.firstName}
+              helperText={errors.firstName?.message}
             />
           </Grid>
 
           {/* Last Name */}
           <Grid size={3}>
-            <Controller
-              name="lastName"
-              control={control}
-              rules={{
+            <TextField
+              label="Last name *"
+              fullWidth
+              {...register('lastName', {
                 required: "Last name is required",
                 pattern: {
                   value: /^[^\d]*$/,
@@ -106,16 +117,9 @@ const AddPatientReactHookForm = () => {
                   value: 50,
                   message: "Last name cannot exceed 50 characters"
                 }
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Last name *"
-                  fullWidth
-                  error={!!errors.lastName}
-                  helperText={errors.lastName?.message}
-                />
-              )}
+              })}
+              error={!!errors.lastName}
+              helperText={errors.lastName?.message}
             />
           </Grid>
 
@@ -123,27 +127,24 @@ const AddPatientReactHookForm = () => {
           <Grid size={12}>
             <FormControl error={!!errors.gender}>
               <FormLabel>Gender *</FormLabel>
-              <Controller
-                name="gender"
-                control={control}
-                rules={{ required: "Gender is required" }}
-                render={({ field }) => (
-                  <RadioGroup row {...field}>
-                    {['Male', 'Female'].map((option) => (
-                      <StyledGenderBox
-                        key={option}
-                        selected={watchedValues.gender === option}
-                      >
-                        <FormControlLabel
-                          value={option}
-                          control={<Radio color="primary" />}
-                          label={option}
-                        />
-                      </StyledGenderBox>
-                    ))}
-                  </RadioGroup>
-                )}
-              />
+              <RadioGroup
+                row
+                value={watchedValues.gender}
+                onChange={handleGenderChange}
+              >
+                {['Male', 'Female'].map(option => (
+                  <StyledGenderBox
+                    key={option}
+                    selected={watchedValues.gender === option}
+                  >
+                    <FormControlLabel
+                      value={option}
+                      control={<Radio color="primary" />}
+                      label={option}
+                    />
+                  </StyledGenderBox>
+                ))}
+              </RadioGroup>
               <Typography variant="caption" color="error">
                 {errors.gender?.message}
               </Typography>
@@ -152,33 +153,17 @@ const AddPatientReactHookForm = () => {
 
           {/* Birth Date */}
           <Grid size={3}>
-            <Controller
-              name="birthDate"
-              control={control}
-              rules={{
-                required: "Date of birth is required",
-                validate: (value) => {
-                  if (!value) return "Date of birth is required";
-                  if (value > new Date()) {
-                    return "Birth date cannot be in the future";
-                  }
-                  return true;
-                }
+            <DatePicker
+              label="Date of birth *"
+              value={watchedValues.birthDate}
+              onChange={handleDateChange}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.birthDate,
+                  helperText: errors.birthDate?.message,
+                },
               }}
-              render={({ field }) => (
-                <DatePicker
-                  label="Date of birth *"
-                  value={field.value}
-                  onChange={field.onChange}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!errors.birthDate,
-                      helperText: errors.birthDate?.message,
-                    },
-                  }}
-                />
-              )}
             />
           </Grid>
 
@@ -187,38 +172,34 @@ const AddPatientReactHookForm = () => {
             <FormControl component="fieldset" error={!!errors.disorders}>
               <FormLabel component="legend">Disorders *</FormLabel>
               <FormGroup row>
-                {disorderOptions.map((disorder) => (
-                  <StyledDisorderBox
-                    key={disorder}
-                    selected={watchedValues.disorders?.includes(disorder)}
-                  >
-                    <Controller
-                      name="disorders"
-                      control={control}
-                      rules={{
-                        validate: (value) => value.length > 0 || "At least one disorder must be selected"
-                      }}
-                      render={({ field }) => (
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={field.value?.includes(disorder)}
-                              onChange={(e) => {
-                                const newDisorders = e.target.checked
-                                  ? [...(field.value || []), disorder]
-                                  : (field.value || []).filter(d => d !== disorder);
-                                field.onChange(newDisorders);
-                              }}
-                              name={disorder}
-                              color="primary"
-                            />
-                          }
-                          label={disorder}
-                        />
-                      )}
-                    />
-                  </StyledDisorderBox>
-                ))}
+                {disorderOptions.map(disorder => {
+                  const checked = watchedValues.disorders?.includes(disorder);
+                  return (
+                    <StyledDisorderBox key={disorder} selected={checked}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={checked}
+                            onChange={(e) => {
+                              const current = watchedValues.disorders || [];
+                              let newDisorders;
+                              if (e.target.checked) {
+                                newDisorders = [...current, disorder];
+                              } else {
+                                newDisorders = current.filter(d => d !== disorder);
+                              }
+                              setValue('disorders', newDisorders, { shouldValidate: true });
+                              trigger('disorders');
+                            }}
+                            name={disorder}
+                            color="primary"
+                          />
+                        }
+                        label={disorder}
+                      />
+                    </StyledDisorderBox>
+                  );
+                })}
               </FormGroup>
               <Typography variant="caption" color="error">
                 {errors.disorders?.message}
@@ -228,44 +209,31 @@ const AddPatientReactHookForm = () => {
 
           {/* Template */}
           <Grid size={4}>
-            <Controller
-              name="template"
-              control={control}
-              rules={{ required: "Workspace template is required" }}
-              render={({ field }) => (
-                <TextField
-                  select
-                  label="Workspace template *"
-                  fullWidth
-                  error={!!errors.template}
-                  helperText={errors.template?.message}
-                  {...field}
-                >
-                  <MenuItem value="Left">Left</MenuItem>
-                  <MenuItem value="Right">Right</MenuItem>
-                  <MenuItem value="Both">Both</MenuItem>
-                </TextField>
-              )}
-            />
+            <TextField
+              select
+              label="Workspace template *"
+              fullWidth
+              error={!!errors.template}
+              helperText={errors.template?.message}
+              value={watchedValues.template}
+              {...register('template', { required: "Workspace template is required" })}
+            >
+              <MenuItem value="Left">Left</MenuItem>
+              <MenuItem value="Right">Right</MenuItem>
+              <MenuItem value="Both">Both</MenuItem>
+            </TextField>
           </Grid>
 
           {/* Buttons */}
           <Grid size={12}>
-            <StyledButton
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
+            <StyledButton variant="contained" color="primary" type="submit">
               Save
             </StyledButton>
-            <StyledCancelButton
-              variant="text"
-              color="black"
-              onClick={() => navigate('/')}
-            >
+            <StyledCancelButton variant="text" color="black" onClick={() => navigate('/')}>
               Cancel
             </StyledCancelButton>
           </Grid>
+
         </Grid>
       </form>
     </StyledCard>

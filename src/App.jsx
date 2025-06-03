@@ -19,7 +19,11 @@ const router = createBrowserRouter([
       { path: 'add-patient-formik', element: <AddPatientFormikPage /> },
     ],
   },
-]);
+  ],
+  {
+    basename: '/PatientsForm', 
+  }
+);
 
 function App() {
   return (

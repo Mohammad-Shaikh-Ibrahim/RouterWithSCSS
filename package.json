@@ -1,9 +1,9 @@
 {
-  "name": "routerwithscss",
+  "name": "patientsform",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.io/Mohammad-Shaikh-Ibrahim/RouterWithSCSS/",
+  "homepage": "https://github.io/Mohammad-Shaikh-Ibrahim/PatientsForm/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
