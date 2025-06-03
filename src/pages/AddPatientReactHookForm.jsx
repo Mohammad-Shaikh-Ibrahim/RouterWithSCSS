@@ -1,12 +1,15 @@
-import { useForm } from 'react-hook-form';
-import {
-  Box, Button, FormControl, FormLabel, Grid, MenuItem,
-  RadioGroup, Radio, TextField, Checkbox, FormControlLabel,
-  Typography, FormGroup
-} from '@mui/material';
+import { useState } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { DatePicker } from '@mui/x-date-pickers';
 import { usePatients } from '../hooks/usePatients';
 import { useNavigate } from 'react-router-dom';
+
+import {
+  Button, FormControl, FormLabel, Grid, MenuItem,
+  RadioGroup, Radio, TextField, Checkbox, FormControlLabel,
+  Typography, FormGroup
+} from '@mui/material';
+
 import {
   StyledCard,
   StyledTitle,
@@ -21,6 +24,7 @@ const disorderOptions = ['PD', 'ET', 'Dyst_G', 'Dyst_NG', 'OCD', 'Tourette', 'Ep
 const AddPatientReactHookForm = () => {
   const { addPatient } = usePatients();
   const navigate = useNavigate();
+  const [workspaceError, setWorkspaceError] = useState(null);
 
   const {
     register,
@@ -28,6 +32,7 @@ const AddPatientReactHookForm = () => {
     watch,
     setValue,
     trigger,
+    control,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -36,13 +41,57 @@ const AddPatientReactHookForm = () => {
       gender: '',
       birthDate: null,
       disorders: [],
-      template: '',
+      workspaces: [{ name: '' }]
     }
   });
 
+
   const watchedValues = watch();
 
+  const { fields, append, update } = useFieldArray({
+    control,
+    name: 'workspaces'
+  });
+
+
+  const handleDateChange = (date) => {
+    setValue('birthDate', date, { shouldValidate: true });
+    trigger('birthDate');
+  };
+
+  const handleGenderChange = (e) => {
+    setValue('gender', e.target.value, { shouldValidate: true });
+    trigger('gender');
+  };
+
+  const handleWorkspaceChange = (index, value) => {
+    update(index, { name: value.trim() });
+  };
+
+
+  const validateWorkspaces = () => {
+    const workspaceNames = (watch('workspaces') || []).map(w => w.name.trim());
+    const nonEmpty = workspaceNames.filter(name => name !== '');
+    const unique = new Set(nonEmpty);
+
+    if (nonEmpty.length === 0) {
+      setWorkspaceError('At least one workspace is required');
+      return false;
+    }
+
+    if (unique.size !== nonEmpty.length) {
+      setWorkspaceError('Duplicate workspace names are not allowed');
+      return false;
+    }
+
+    setWorkspaceError(null);
+    return true;
+  };
+
+
   const onSubmit = (data) => {
+    if (!validateWorkspaces()) return;
+
     const d = new Date(data.birthDate);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -54,17 +103,14 @@ const AddPatientReactHookForm = () => {
       birthDate: formattedBirthDate
     };
     addPatient(newPatient);
+    alert(`Patient Added!
+    Name: ${newPatient.firstName} ${newPatient.lastName}
+    Gender: ${newPatient.gender}
+    Birth Date: ${newPatient.birthDate}
+    Disorders: ${newPatient.disorders.join(', ')}
+    Workspaces: ${newPatient.workspaces.map(ws => ws.name).join(', ')}`
+    );
     navigate('/');
-  };
-
-  const handleDateChange = (date) => {
-    setValue('birthDate', date, { shouldValidate: true });
-    trigger('birthDate');
-  };
-
-  const handleGenderChange = (e) => {
-    setValue('gender', e.target.value, { shouldValidate: true });
-    trigger('gender');
   };
 
   return (
@@ -207,21 +253,33 @@ const AddPatientReactHookForm = () => {
             </FormControl>
           </Grid>
 
-          {/* Template */}
+          {/*Workspace Template */}
           <Grid size={4}>
-            <TextField
-              select
-              label="Workspace template *"
-              fullWidth
-              error={!!errors.template}
-              helperText={errors.template?.message}
-              value={watchedValues.template}
-              {...register('template', { required: "Workspace template is required" })}
-            >
-              <MenuItem value="Left">Left</MenuItem>
-              <MenuItem value="Right">Right</MenuItem>
-              <MenuItem value="Both">Both</MenuItem>
-            </TextField>
+            {fields.map((field, index) => (
+              <TextField
+                select
+                key={field.id}
+                label={`Workspace template * ${index + 1}`}
+                onChange={(e) => handleWorkspaceChange(index, e.target.value)}
+                fullWidth
+                margin='dense'
+                value={watch(`workspaces.${index}.name`) || ''}
+                error={!!errors.template}
+                helperText={errors.template?.message}
+                {...register(`workspaces.${index}.name`, {
+                  required: 'Workspace template is required'
+                })}
+              >
+                <MenuItem value="Left">Left</MenuItem>
+                <MenuItem value="Right">Right</MenuItem>
+                <MenuItem value="Both">Both</MenuItem>
+              </TextField>
+            ))}
+            <Button variant="outlined" onClick={() => append({ name: '' })} sx={{ mt: 1 }}>
+              Add Another Workspace
+            </Button>
+            {workspaceError && <Typography color="error">{workspaceError}</Typography>}
+
           </Grid>
 
           {/* Buttons */}
