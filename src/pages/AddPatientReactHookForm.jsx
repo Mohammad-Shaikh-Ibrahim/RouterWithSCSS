@@ -15,8 +15,7 @@ import {
   StyledTitle,
   StyledButton,
   StyledCancelButton,
-  StyledGenderBox,
-  StyledDisorderBox
+  StyledBox,
 } from '../components/shared/FormStyles';
 
 const disorderOptions = ['PD', 'ET', 'Dyst_G', 'Dyst_NG', 'OCD', 'Tourette', 'Epilepsy', 'Other'];
@@ -173,7 +172,7 @@ const AddPatientReactHookForm = () => {
                 onChange={handleGenderChange}
               >
                 {['Male', 'Female'].map(option => (
-                  <StyledGenderBox
+                  <StyledBox
                     key={option}
                     selected={watchedValues.gender === option}
                   >
@@ -182,7 +181,7 @@ const AddPatientReactHookForm = () => {
                       control={<Radio color="primary" />}
                       label={option}
                     />
-                  </StyledGenderBox>
+                  </StyledBox>
                 ))}
               </RadioGroup>
               <Typography variant="caption" color="error">
@@ -215,7 +214,7 @@ const AddPatientReactHookForm = () => {
                 {disorderOptions.map(disorder => {
                   const checked = watchedValues.disorders?.includes(disorder);
                   return (
-                    <StyledDisorderBox key={disorder} selected={checked}>
+                    <StyledBox key={disorder} selected={checked}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -237,7 +236,7 @@ const AddPatientReactHookForm = () => {
                         }
                         label={disorder}
                       />
-                    </StyledDisorderBox>
+                    </StyledBox>
                   );
                 })}
               </FormGroup>

@@ -20,18 +20,10 @@ export const StyledCancelButton = styled(Button)`
   margin-left: 16px;
 `;
 
-export const StyledGenderBox = styled(Box)`
-  padding: 8px;
-  margin-right: 16px;
-  border: 1px solid ${props => props.selected ? '#b92031' : '#e0e0e0'};
-  border-radius: 4px;
-  background-color: ${props => props.selected ? 'rgba(244, 67, 54, 0.085)' : 'transparent'};
-`;
-
-export const StyledDisorderBox = styled(Box)`
+export const StyledBox = styled(Box)`
   padding: 4px;
   margin-right: 12px;
   border: 1px solid ${props => props.selected ? '#b92031' : '#e0e0e0'};
   border-radius: 4px;
   background-color: ${props => props.selected ? 'rgba(244, 67, 54, 0.085)' : 'transparent'};
-`; 
+`;

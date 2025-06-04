@@ -13,8 +13,7 @@ import {
     StyledTitle,
     StyledButton,
     StyledCancelButton,
-    StyledGenderBox,
-    StyledDisorderBox
+    StyledBox,
 } from '../components/shared/FormStyles';
 
 const validationSchema = Yup.object().shape({
@@ -119,7 +118,7 @@ const AddPatientFormikForm = () => {
                                         {({ field }) => (
                                             <RadioGroup row {...field}>
                                                 {['Male', 'Female'].map((option) => (
-                                                    <StyledGenderBox
+                                                    <StyledBox
                                                         key={option}
                                                         selected={values.gender === option}
                                                     >
@@ -128,7 +127,7 @@ const AddPatientFormikForm = () => {
                                                             control={<Radio color="primary" />}
                                                             label={option}
                                                         />
-                                                    </StyledGenderBox>
+                                                    </StyledBox>
                                                 ))}
                                             </RadioGroup>
                                         )}
@@ -167,7 +166,7 @@ const AddPatientFormikForm = () => {
                                     <FormLabel component="legend">Disorders *</FormLabel>
                                     <FormGroup row>
                                         {disorderOptions.map((disorder) => (
-                                            <StyledDisorderBox
+                                            <StyledBox
                                                 key={disorder}
                                                 selected={values.disorders.includes(disorder)}
                                             >
@@ -187,7 +186,7 @@ const AddPatientFormikForm = () => {
                                                     }
                                                     label={disorder}
                                                 />
-                                            </StyledDisorderBox>
+                                            </StyledBox>
                                         ))}
                                     </FormGroup>
                                     <Typography variant="caption" color="error">
