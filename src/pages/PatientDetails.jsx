@@ -24,7 +24,7 @@ export default function PatientDetails() {
                         <th>Gender</th>
                         <th>Birth Date</th>
                         <th>Disorders</th>
-                        <th>Template</th>
+                        <th>Workspace</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,7 +35,10 @@ export default function PatientDetails() {
                         <td>{patient.gender}</td>
                         <td>{patient.birthDate}</td>
                         <td>{patient.disorders.join(', ')}</td>
-                        <td>{patient.template}</td>
+                        <td>  {patient.workspace && patient.workspace.length > 0
+                                ? patient.workspace.map(ws => ws.name).join(', ')
+                                : 'N/A' 
+                            }</td>
                     </tr>
                 </tbody>
             </table>

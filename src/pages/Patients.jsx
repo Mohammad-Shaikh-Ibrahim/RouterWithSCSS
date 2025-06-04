@@ -24,7 +24,16 @@ const Patients = () => {
                                     variant="contained"
                                     color="primary"
                                     startIcon={<AddIcon />}
-                                    onClick={() => navigate('/add-patient')}
+                                    onClick={() => navigate('/add-patients')}
+                                    className="add-patient-btn"
+                                >
+                                    Add Patients
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => navigate('/add-patient-ReactHookForm')}
                                     className="add-patient-btn"
                                 >
                                     Add New Patient

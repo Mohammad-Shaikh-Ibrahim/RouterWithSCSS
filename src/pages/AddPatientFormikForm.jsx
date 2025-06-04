@@ -1,14 +1,20 @@
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import {
-    Box, Button, Card, FormControl, FormLabel, Grid, MenuItem,
+    Box, Button, FormControl, FormLabel, Grid, MenuItem,
     RadioGroup, Radio, TextField, Checkbox, FormControlLabel,
     Typography, FormGroup
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { usePatients } from '../hooks/usePatients';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import {
+    StyledCard,
+    StyledTitle,
+    StyledButton,
+    StyledCancelButton,
+    StyledBox,
+} from '../components/shared/FormStyles';
 
 const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -34,41 +40,6 @@ const validationSchema = Yup.object().shape({
 
 const disorderOptions = ['PD', 'ET', 'Dyst_G', 'Dyst_NG', 'OCD', 'Tourette', 'Epilepsy', 'Other'];
 
-const StyledCard = styled(Card)`
-  padding: 24px;
-  max-width: 80%;
-  margin: 32px auto;
-`;
-
-const StyledTitle = styled(Typography)`
-  margin: 32px 0;
-`;
-
-const StyledButton = styled(Button)`
-  padding-left: 48px;
-  padding-right: 48px;
-`;
-
-const StyledCancelButton = styled(Button)`
-  margin-left: 16px;
-`;
-
-const StyledGenderBox = styled(Box)`
-  padding: 8px;
-  margin-right: 16px;
-  border: 1px solid ${props => props.selected ? '#b92031' : '#e0e0e0'};
-  border-radius: 4px;
-  background-color: ${props => props.selected ? 'rgba(244, 67, 54, 0.085)' : 'transparent'};
-`;
-
-const StyledDisorderBox = styled(Box)`
-  padding: 4px;
-  margin-right: 12px;
-  border: 1px solid ${props => props.selected ? '#b92031' : '#e0e0e0'};
-  border-radius: 4px;
-  background-color: ${props => props.selected ? 'rgba(244, 67, 54, 0.085)' : 'transparent'};
-`;
-
 const AddPatientFormikForm = () => {
     const { addPatient } = usePatients();
     const navigate = useNavigate();
@@ -83,7 +54,12 @@ const AddPatientFormikForm = () => {
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
-        const formattedBirthDate = values.birthDate.toISOString().split('T')[0];
+        const d = new Date(values.birthDate);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+
+        const formattedBirthDate = `${year}-${month}-${day}`;
         const newPatient = {
             ...values,
             birthDate: formattedBirthDate
@@ -142,7 +118,7 @@ const AddPatientFormikForm = () => {
                                         {({ field }) => (
                                             <RadioGroup row {...field}>
                                                 {['Male', 'Female'].map((option) => (
-                                                    <StyledGenderBox
+                                                    <StyledBox
                                                         key={option}
                                                         selected={values.gender === option}
                                                     >
@@ -151,7 +127,7 @@ const AddPatientFormikForm = () => {
                                                             control={<Radio color="primary" />}
                                                             label={option}
                                                         />
-                                                    </StyledGenderBox>
+                                                    </StyledBox>
                                                 ))}
                                             </RadioGroup>
                                         )}
@@ -190,7 +166,7 @@ const AddPatientFormikForm = () => {
                                     <FormLabel component="legend">Disorders *</FormLabel>
                                     <FormGroup row>
                                         {disorderOptions.map((disorder) => (
-                                            <StyledDisorderBox
+                                            <StyledBox
                                                 key={disorder}
                                                 selected={values.disorders.includes(disorder)}
                                             >
@@ -210,7 +186,7 @@ const AddPatientFormikForm = () => {
                                                     }
                                                     label={disorder}
                                                 />
-                                            </StyledDisorderBox>
+                                            </StyledBox>
                                         ))}
                                     </FormGroup>
                                     <Typography variant="caption" color="error">
