@@ -72,15 +72,9 @@ const AddPatientReactHookForm = () => {
   const validateWorkspaces = () => {
     const workspaceNames = (watch('workspaces') || []).map(w => w.name.trim());
     const nonEmpty = workspaceNames.filter(name => name !== '');
-    const unique = new Set(nonEmpty);
 
     if (nonEmpty.length === 0) {
       setWorkspaceError('At least one workspace is required');
-      return false;
-    }
-
-    if (unique.size !== nonEmpty.length) {
-      setWorkspaceError('Duplicate workspace names are not allowed');
       return false;
     }
 
