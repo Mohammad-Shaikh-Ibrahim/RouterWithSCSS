@@ -143,9 +143,9 @@ const AddPatients = () => {
     return (
         <StyledCard>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} >
 
-                    <Grid container spacing={1}>
+                    <Grid container spacing={1} >
                         <Grid size={6} >
                             <PatientSection
                                 title="Add Left Patient"

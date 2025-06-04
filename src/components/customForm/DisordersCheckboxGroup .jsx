@@ -25,7 +25,7 @@ const DisordersCheckboxGroup = ({
               {options.map((option) => {
                 const checked = field.value?.includes(option);
                 return (
-                  <StyledBox key={option} selected={checked}>
+                  <StyledBox key={option} selected={checked} marginBottom={2}>
                     <FormControlLabel
                       control={
                         <Checkbox

@@ -25,44 +25,46 @@ const PatientSection = ({
                 <StyledTitle variant="h4" gutterBottom>{title}</StyledTitle>
             </Grid>
 
-            {/* First Name */}
-            <Grid size={3}>
-                <TextInput
-                    label="First name *"
-                    {...register(`${fieldPrefix}.firstName`, {
-                        required: "First name is required",
-                        pattern: {
-                            value: /^[^\d]*$/,
-                            message: "First name cannot contain numbers"
-                        },
-                        minLength: { value: 2, message: "First name must be at least 2 characters" },
-                        maxLength: { value: 50, message: "First name cannot exceed 50 characters" }
-                    })}
-                    error={!!errors?.[fieldPrefix]?.firstName}
-                    helperText={errors?.[fieldPrefix]?.firstName?.message}
-                />
-            </Grid>
+            <Grid container size={12} spacing={1} marginBottom={2}>
+                {/* First Name */}
+                <Grid size={4}>
+                    <TextInput
+                        label="First name *"
+                        {...register(`${fieldPrefix}.firstName`, {
+                            required: "First name is required",
+                            pattern: {
+                                value: /^[^\d]*$/,
+                                message: "First name cannot contain numbers"
+                            },
+                            minLength: { value: 2, message: "First name must be at least 2 characters" },
+                            maxLength: { value: 50, message: "First name cannot exceed 50 characters" }
+                        })}
+                        error={!!errors?.[fieldPrefix]?.firstName}
+                        helperText={errors?.[fieldPrefix]?.firstName?.message}
+                    />
+                </Grid>
 
-            {/* Last Name */}
-            <Grid size={3}>
-                <TextInput
-                    label="Last name *"
-                    {...register(`${fieldPrefix}.lastName`, {
-                        required: "Last name is required",
-                        pattern: {
-                            value: /^[^\d]*$/,
-                            message: "Last name cannot contain numbers"
-                        },
-                        minLength: { value: 2, message: "Last name must be at least 2 characters" },
-                        maxLength: { value: 50, message: "Last name cannot exceed 50 characters" }
-                    })}
-                    error={!!errors?.[fieldPrefix]?.lastName}
-                    helperText={errors?.[fieldPrefix]?.lastName?.message}
-                />
+                {/* Last Name */}
+                <Grid size={4} >
+                    <TextInput
+                        label="Last name *"
+                        {...register(`${fieldPrefix}.lastName`, {
+                            required: "Last name is required",
+                            pattern: {
+                                value: /^[^\d]*$/,
+                                message: "Last name cannot contain numbers"
+                            },
+                            minLength: { value: 2, message: "Last name must be at least 2 characters" },
+                            maxLength: { value: 50, message: "Last name cannot exceed 50 characters" }
+                        })}
+                        error={!!errors?.[fieldPrefix]?.lastName}
+                        helperText={errors?.[fieldPrefix]?.lastName?.message}
+                    />
+                </Grid>
             </Grid>
 
             {/* Gender */}
-            <Grid size={12}>
+            <Grid size={12} marginBottom={2}>
                 <GenderRadioGroup
                     name={`${fieldPrefix}.gender`}
                     control={control}
@@ -71,7 +73,7 @@ const PatientSection = ({
             </Grid>
 
             {/* Birth Date */}
-            <Grid size={3}>
+            <Grid size={3} marginBottom={2}>
                 <RHFDatePicker
                     name={`${fieldPrefix}.birthDate`}
                     control={control}
@@ -81,7 +83,7 @@ const PatientSection = ({
             </Grid>
 
             {/* Disorders */}
-            <Grid size={12}>
+            <Grid size={12} marginBottom={2}>
                 <DisordersCheckboxGroup
                     name={`${fieldPrefix}.disorders`}
                     control={control}
@@ -92,7 +94,7 @@ const PatientSection = ({
             </Grid>
 
             {/* Workspace Template */}
-            <Grid size={4}>
+            <Grid size={4} marginBottom={2}>
                 <WorkspaceTemplateFields
                     fieldPrefix={fieldPrefix}
                     fields={fields}
